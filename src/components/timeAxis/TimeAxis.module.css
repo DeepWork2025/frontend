@@ -1,8 +1,9 @@
-.timeBlockContainer {
+.scrollContainer {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  max-height: 550px;
+  overflow-y: auto;
   background-color: #f9f9f9;
+  border: 1px solid #ccc;
 }
 
 .timeZone {

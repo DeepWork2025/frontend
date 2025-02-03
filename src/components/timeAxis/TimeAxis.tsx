@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styles from "./TimeAxis.module.css";
 
 const TimeAxis: React.FC = () => {
   const hours = Array.from({ length: 24 }, (_, hour) => hour);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const scrollOffset = 8 * 50;
+      containerRef.current.scrollTop = scrollOffset;
+    }
+  }, []);
 
   return (
-    <div className={styles.timeBlockContainer}>
+    <div className={styles.scrollContainer} ref={containerRef}>
       {hours.map((hour) => (
         <div className={styles.timeZone} key={hour}>
-          {/* Hour */}
           <div className={styles.timeLabel}>
             {hour === 0
               ? "12 AM"
@@ -18,7 +25,6 @@ const TimeAxis: React.FC = () => {
               ? "12 PM"
               : `${hour - 12} PM`}
           </div>
-          {/* Axis */}
           <div className={styles.timeLine}></div>
         </div>
       ))}
