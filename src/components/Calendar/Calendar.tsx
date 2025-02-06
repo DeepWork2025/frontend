@@ -1,6 +1,4 @@
-import type React from "react";
-import { useState } from "react";
-import styles from "./Calendar.module.css";
+import React, { useState } from "react";
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -15,6 +13,7 @@ const Calendar: React.FC = () => {
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1)
     );
+
   const nextMonth = () =>
     setCurrentDate(
       new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1)
@@ -31,14 +30,18 @@ const Calendar: React.FC = () => {
     const startingDay = startDay(currentDate);
 
     for (let i = 0; i < startingDay; i++) {
-      days.push(<div key={`empty-${i}`} className={styles.calendarDay}></div>);
+      days.push(<div key={`empty-${i}`} className="w-10 h-10"></div>);
     }
 
     for (let i = 1; i <= totalDays; i++) {
       days.push(
         <div
           key={i}
-          className={`${styles.calendarDay} ${isToday(i) ? styles.today : ""}`}
+          className={`w-10 h-10 flex items-center justify-center  text-sm font-medium ${
+            isToday(i)
+              ? "bg-yellow-400 text-white rounded-full font-bold"
+              : "hover:bg-gray-200"
+          }`}
         >
           {i}
         </div>
@@ -49,23 +52,40 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className={styles.calendar}>
-      <div className={styles.calendarHeader}>
-        <button onClick={prevMonth}>&lt;</button>
-        <h2>
+    <div className="w-[320px] h-[350px] flex flex-col border rounded-lg shadow-md bg-white overflow-hidden">
+      {/* header */}
+      <div className="flex justify-between items-center bg-gray-100 px-4 py-2">
+        <button
+          className="text-xl font-bold hover:text-gray-600"
+          onClick={prevMonth}
+        >
+          &lt;
+        </button>
+        <h2 className="text-lg font-semibold">
           {currentDate.toLocaleString("default", {
             month: "long",
             year: "numeric",
           })}
         </h2>
-        <button onClick={nextMonth}>&gt;</button>
+        <button
+          className="text-xl font-bold hover:text-gray-600"
+          onClick={nextMonth}
+        >
+          &gt;
+        </button>
       </div>
-      <div className={styles.calendarWeekdays}>
+
+      {/* week */}
+      <div className="grid grid-cols-7 text-center font-bold bg-gray-50 py-2 text-gray-700">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day}>{day}</div>
+          <div key={day} className="text-sm">
+            {day}
+          </div>
         ))}
       </div>
-      <div className={styles.calendarDays}>{renderDays()}</div>
+
+      {/* date */}
+      <div className="grid grid-cols-7 gap-1 p-2">{renderDays()}</div>
     </div>
   );
 };
