@@ -1,39 +1,34 @@
-import React from "react";
-import "./timeAxis.css";
+import React, { useRef, useEffect } from "react";
 
 const TimeAxis: React.FC = () => {
-  const hours = Array.from({ length: 24 }).map((_, hour) => hour);
+  const hours = Array.from({ length: 24 }, (_, hour) => hour);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      const scrollOffset = 8 * 48;
+      containerRef.current.scrollTop = scrollOffset;
+    }
+  }, []);
 
   return (
-    <div>
-      <div className="Date-title flex">
-        <h1 className="font-mono font-semibold text-4xl">Today</h1>
-        <div>02:17</div>
-      </div>
-      <div  className="time-block-container">
-        <div className="z-0 h-full w-full py-4">
-        {hours.map((hour) => (
-          <div className="time-zone" key={hour}>
-            <div className="time-number">
-              <div>
-                <span
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    height: "40px",
-                  }}
-                >
-                  {hour.toString().padStart(2, "0")}:00
-                </span>
-              </div>
-            </div>
-            {/* Event 入口？ */}
-            <div className="time-axis">
-              <div style={{ flexGrow: 1,
-                backgroundColor: "#f9f9f9" }}></div>
-            </div>
+    <div
+      className="h-[540px] w-full overflow-y-auto bg-gray-100 border border-gray-300 shadow-md rounded-md"
+      ref={containerRef}
+    >
+      {hours.map((hour) => (
+        <div key={hour} className="flex items-center h-12  px-4">
+          <div className="w-16 text-right text-gray-700 font-medium">
+            {hour === 0
+              ? "12 AM"
+              : hour < 12
+              ? `${hour} AM`
+              : hour === 12
+              ? "12 PM"
+              : `${hour - 12} PM`}
           </div>
-        ))}
+
+          <div className="flex-grow h-px bg-gray-300 ml-4"></div>
         </div>
         <div className="z-1">event</div>
       </div>

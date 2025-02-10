@@ -6,18 +6,8 @@ import Timer from "../components/timer/Timer";
 import AddEvent from "../components/addEvent/AddEvent";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
-import { useEffect } from "react";
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    if (!authToken) {
-      navigate("/");
-    }
-  }, [navigate]);
-
   return (
     <div className="home-container">
       <Navbar />

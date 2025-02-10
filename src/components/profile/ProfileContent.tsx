@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAvatar } from "../../content/AvatarContext";
-import "./ProfileContent.css";
 
 const ProfileContent: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const navigate = useNavigate();
-
   const { avatarUrl, setAvatarUrl } = useAvatar();
 
   useEffect(() => {
@@ -44,15 +42,22 @@ const ProfileContent: React.FC = () => {
   };
 
   return (
-    <div className="profile-container">
-      <h2 className="profile-heading">Profile Settings</h2>
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-center text-2xl font-semibold text-gray-800 mb-6">
+        Profile Settings
+      </h2>
 
-      <div className="avatar-section">
-        <div className="avatar-preview">
+      {/* Avatar */}
+      <div className="flex flex-col items-center mb-6">
+        <div className="w-36 h-36 rounded-full overflow-hidden bg-gray-300 flex items-center justify-center">
           {avatarUrl ? (
-            <img src={avatarUrl} alt="Avatar" className="avatar-img" />
+            <img
+              src={avatarUrl}
+              alt="Avatar"
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <span className="avatar-placeholder">No avatar</span>
+            <span className="text-gray-500">No avatar</span>
           )}
         </div>
         <input
@@ -60,12 +65,16 @@ const ProfileContent: React.FC = () => {
           id="avatar-upload"
           accept="image/*"
           onChange={handleImageChange}
-          className="avatar-upload-input"
+          className="mt-3 text-sm text-gray-700 cursor-pointer border rounded-md py-2 px-4 bg-blue-500 text-white hover:bg-blue-600"
         />
       </div>
 
-      <div className="username-section">
-        <label htmlFor="username" className="label">
+      {/* Username */}
+      <div className="mb-6">
+        <label
+          htmlFor="username"
+          className="block text-gray-700 font-medium mb-2"
+        >
           Username
         </label>
         <input
@@ -73,14 +82,15 @@ const ProfileContent: React.FC = () => {
           id="username"
           value={username}
           onChange={handleUsernameChange}
-          className="input-field"
+          className="w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
           placeholder="Enter your username"
         />
       </div>
 
+      {/* Save */}
       <button
         onClick={isSaved ? handleNavigateHome : handleSaveProfile}
-        className="save-btn"
+        className="w-full py-3 text-lg font-medium bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
       >
         {isSaved ? "Go to Home" : "Save Profile"}
       </button>

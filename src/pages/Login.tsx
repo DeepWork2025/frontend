@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoginForm from "../components/loginForm/LoginForm";
 
 type LoginProps = {
@@ -21,12 +21,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   return (
     <div className="container">
-      <h2>Login</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <LoginForm onLogin={handleLogin} />
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
     </div>
   );
 };
