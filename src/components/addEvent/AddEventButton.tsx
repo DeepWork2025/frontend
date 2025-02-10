@@ -1,5 +1,4 @@
-import './addEvent.css';
-import EventForm from './EventForm';
+import EventForm from './CreateEventForm';
 import { EventData } from '../../types/event.types';
 import {useState} from 'react';
 

@@ -3,7 +3,7 @@ import { EventFormProps, EventData } from '../../types/event.types';
 import { validateEventData } from '../../utils/eventValidation';
 import { createEvent } from '../../api/eventApi';
 
-export const EventForm: React.FC<eventFormProps> = ({
+const CreateEventForm: React.FC<EventFormProps> = ({
     initialDateTime,
     onSubmit,
     onClose
@@ -148,5 +148,4 @@ return (
 
 }
 
-
-export default EventForm
+export default CreateEventForm
