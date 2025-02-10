@@ -12,11 +12,13 @@ const TimeAxis: React.FC = () => {
   }, []);
 
   return (
+    <div>
     <div
       className="h-[540px] w-full overflow-y-auto bg-gray-100 border border-gray-300 shadow-md rounded-md"
       ref={containerRef}
     >
       {hours.map((hour) => (
+      <div>
         <div key={hour} className="flex items-center h-12  px-4">
           <div className="w-16 text-right text-gray-700 font-medium">
             {hour === 0
@@ -30,9 +32,10 @@ const TimeAxis: React.FC = () => {
 
           <div className="flex-grow h-px bg-gray-300 ml-4"></div>
         </div>
-        <div className="z-1">event</div>
-      </div>
+      <div className="z-1">event</div>
+      </div>))}
     </div>
+  </div>
   );
 };
 
