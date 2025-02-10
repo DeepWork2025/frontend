@@ -1,7 +1,8 @@
 export interface EventData {
-    title: string;
-    start: Date;
-    end: Date;
+  id?: string;
+  title: string;
+    startTime: Date;
+    endTime: Date;
     description?: string;
     label: string;
   }

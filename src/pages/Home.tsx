@@ -3,7 +3,7 @@ import Navbar from "../components/navbar/Navbar";
 import Calendar from "../components/calendar/Calendar";
 import TimeAxis from "../components/timeAxis/TimeAxis";
 import Timer from "../components/timer/Timer";
-import AddEvent from "../components/addEvent/AddEventButton";
+import AddEvent from "../components/addEvent/AddEvent";
 import { useNavigate } from "react-router-dom";
 import "../styles/Home.css";
 

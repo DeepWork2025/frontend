@@ -22,14 +22,7 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
         const hourHeight = 48; // Assuming each hour block is 48px high
         const hour = Math.floor(relativeY / hourHeight);
 
-        return `${hour.toString().padStart(2,'0')}`;
-    };
-
-    const formatHourDisplay = (hour:number): string => {
-        if(hour===0) return '12 AM';
-        if(hour<12) return `${hour} AM`;
-        if(hour===12) return '12 PM';
-        return `${hour-12} PM`;
+        return `${hour.toString().padStart(2,'0')}:00`;
     };
 
     // when user click TimeAxis to drag
@@ -44,7 +37,7 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
         });
     };
 
-    const handleMouseMove = (e: React.mouseEvent) => {
+    const handleMouseMove = (e: React.MouseEvent) => {
         if(!dragState.isDragging) return;
 
         setDragState(prev => ({
@@ -54,14 +47,9 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
     };
 
     const handleMouseUp = () => {
-        if(!dragState.current) return;
+        if(!dragState.isDragging) return;
 
-        const startHour = dragState.startTime;
-        const endHour = dragState.endTime;
-
-        if (Math.abs(startTime - endTime) >= 15){
-            onCreateEvent(dragState.startTime, dragState.endTime);
-        }
+        onCreateEvent(dragState.startTime, dragState.endTime);
 
         setDragState({
             isDragging: false,
@@ -81,15 +69,15 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
             {/* drag preview */}
             {dragState.isDragging && (
                 <div
-                className="absolute left-16 right-o bg-blue-200 opacity-50 pointer-events-none"
+                className="absolute left-16 right-0 bg-blue-200 opacity-50 pointer-events-none"
                 style={{
                     top: `${Math.min(
-                        parseInt(dragState.startTime.split(':')[0]) * 48, 
-                        parseInt(dragState.endTime.split(':')[0]) * 48
+                        parseInt(dragState.startTime[0]) * 48, 
+                        parseInt(dragState.endTime[0]) * 48
                       )}px`,
                       height: `${Math.abs(
-                        (parseInt(dragState.endTime.split(':')[0]) - 
-                         parseInt(dragState.startTime.split(':')[0])) * 48
+                        (parseInt(dragState.endTime[0]) -
+                         parseInt(dragState.startTime[0])) * 48
                       )}px`
                 }}
                 >
