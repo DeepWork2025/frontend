@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import styles from "./registerForm.module.css";
 import { Link } from "react-router-dom";
 
 interface RegisterFormProps {
@@ -9,248 +8,163 @@ interface RegisterFormProps {
     password: string;
   }) => void;
 }
+
 const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [errors, setErrors] = useState({
     username: "",
     email: "",
     password: "",
-  });
-  const [successIcons, setSuccessIcons] = useState({
-    username: false,
-    email: false,
-    password: false,
-  });
-  const [failureIcons, setFailureIcons] = useState({
-    username: false,
-    email: false,
-    password: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onRegister({ username, email, password });
 
-    // Call validation engine for each field
     validateField(username, "username", "Username cannot be blank");
     validateField(email, "email", "Email cannot be blank");
     validateField(password, "password", "Password cannot be blank");
   };
 
   const validateField = (value: string, field: string, message: string) => {
-    if (value.trim() === "") {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [field]: message,
-      }));
-      setFailureIcons((prev) => ({
-        ...prev,
-        [field]: true,
-      }));
-      setSuccessIcons((prev) => ({
-        ...prev,
-        [field]: false,
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [field]: "",
-      }));
-      setFailureIcons((prev) => ({
-        ...prev,
-        [field]: false,
-      }));
-      setSuccessIcons((prev) => ({
-        ...prev,
-        [field]: true,
-      }));
-    }
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: value.trim() === "" ? message : "",
+    }));
   };
 
   const handleInputChange =
     (setter: React.Dispatch<React.SetStateAction<string>>, field: string) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setter(e.target.value);
-      validateField(
-        e.target.value,
-        field,
-        `${field.charAt(0).toUpperCase() + field.slice(1)} cannot be blank`
-      );
+      validateField(e.target.value, field, `${field} cannot be blank`);
     };
 
-  const validateEmail = (email: string) => {
-    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    if (!email.match(emailPattern)) {
-      setErrors((prev) => ({
-        ...prev,
-        email: "Please enter a valid email",
-      }));
-      setFailureIcons((prev) => ({
-        ...prev,
-        email: true,
-      }));
-      setSuccessIcons((prev) => ({
-        ...prev,
-        email: false,
-      }));
-    } else {
-      setErrors((prev) => ({
-        ...prev,
-        email: "",
-      }));
-      setFailureIcons((prev) => ({
-        ...prev,
-        email: false,
-      }));
-      setSuccessIcons((prev) => ({
-        ...prev,
-        email: true,
-      }));
-    }
-  };
-
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.logo}>
-          <img src="./logo.svg" alt="Logo" />
-        </div>
-        <div className={styles.imageWrapper}>
-          <img src="/public/images/illustration.svg" alt="Illustration" />
-        </div>
-        <div className={styles.text}>
-          Start for free & get <br />
-          attractive offers today!
-        </div>
+    <div className="flex h-screen">
+      {/* left */}
+      <div className="flex flex-col justify-center items-center w-1/2 bg-red-400 text-white px-10">
+        <h1 className="text-3xl font-bold mb-4">Deep Work</h1>
+        <img
+          src="/images/illustration.svg"
+          alt="Illustration"
+          className="w-64 h-64"
+        />
+        <p className="text-lg text-center mt-4">
+          Start for free & get <br /> attractive offers today!
+        </p>
       </div>
-      <form onSubmit={handleSubmit}>
-        <div className={styles.social}>
-          <div className={styles.title}>Get Started</div>
-          <div className={styles.question}>
-            Already Have an Account? <br />
-            <Link to="/login">
-              {" "}
-              <span>Sign In</span>
+
+      {/* right */}
+      <div className="flex flex-col justify-center w-1/2 px-12 bg-white ">
+        <div className="text-left mb-6">
+          <h2 className="text-2xl font-semibold">Get Started</h2>
+          <p className="text-sm text-gray-500">
+            Already have an account?{" "}
+            <Link to="/login" className="text-red-500 hover:underline">
+              Sign In
             </Link>
+          </p>
+        </div>
+
+        {/* Social Media */}
+        <div className="flex space-x-4 mb-4">
+          <button className="flex items-center space-x-2 px-4 py-2 bg-white border rounded-md shadow hover:bg-gray-100">
+            <img
+              src="https://img.icons8.com/color/30/000000/google-logo.png"
+              alt="google"
+            />
+            <span>Sign Up</span>
+          </button>
+          <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white border rounded-md shadow hover:bg-blue-700">
+            <img
+              src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png"
+              alt="facebook"
+            />
+            <span>Sign Up</span>
+          </button>
+        </div>
+
+        <div className="text-center text-gray-500 mb-4">Or</div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Username */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              User Name
+            </label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Abc"
+              value={username}
+              onChange={handleInputChange(setUsername, "username")}
+              className="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
+            />
+            {errors.username && (
+              <p className="text-red-500 text-sm">{errors.username}</p>
+            )}
           </div>
 
-          <div className={styles.btn}>
-            <div className={styles.btn1}>
-              <img
-                src="https://img.icons8.com/color/30/000000/google-logo.png"
-                alt="google"
-              />
-              Sign Up
-            </div>
-            <div className={styles.btn2}>
-              <img
-                src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png"
-                alt="facebook"
-              />
-              Sign Up
-            </div>
+          {/* Email*/}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="abc@gmail.com"
+              value={email}
+              onChange={handleInputChange(setEmail, "email")}
+              className="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
           </div>
 
-          <div className={styles.or}>Or</div>
-        </div>
+          {/* Password  */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              value={password}
+              onChange={handleInputChange(setPassword, "password")}
+              className="w-full px-4 py-2 border rounded-md focus:ring-red-500 focus:border-red-500"
+            />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
+            )}
+          </div>
 
-        {/* User Name input */}
-        <div>
-          <label htmlFor="username">User Name</label>
-          <i className="fa-solid fa-user"></i>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            placeholder="Abc"
-            value={username}
-            onChange={handleInputChange(setUsername, "username")}
-          />
-          <i
-            className={`${
-              failureIcons.username
-                ? "fa-solid fa-circle-exclamation failure-icon"
-                : ""
-            }`}
-          ></i>
-          <i
-            className={`${
-              successIcons.username
-                ? "fa-regular fa-circle-check success-icon"
-                : ""
-            }`}
-          ></i>
-          <div className={styles.error}>{errors.username}</div>
-        </div>
-
-        {/* Email input */}
-        <div>
-          <label htmlFor="email">Email</label>
-          <i className="fa-regular fa-envelope"></i>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="abc@gmail.com"
-            value={email}
-            onChange={(e) => {
-              handleInputChange(setEmail, "email")(e);
-              validateEmail(e.target.value);
-            }}
-          />
-          <i
-            className={`${
-              failureIcons.email
-                ? "fa-solid fa-circle-exclamation failure-icon"
-                : ""
-            }`}
-          ></i>
-          <i
-            className={`${
-              successIcons.email
-                ? "fa-regular fa-circle-check success-icon"
-                : ""
-            }`}
-          ></i>
-          <div className={styles.error}>{errors.email}</div>
-        </div>
-
-        {/* Password input */}
-        <div>
-          <label htmlFor="password">Password</label>
-          <i className="fa-solid fa-lock"></i>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            value={password}
-            onChange={handleInputChange(setPassword, "password")}
-          />
-          <i
-            className={`${
-              failureIcons.password
-                ? "fa-solid fa-circle-exclamation failure-icon"
-                : ""
-            }`}
-          ></i>
-          <i
-            className={`${
-              successIcons.password
-                ? "fa-regular fa-circle-check success-icon"
-                : ""
-            }`}
-          ></i>
-          <div className={styles.error}>{errors.password}</div>
-        </div>
-
-        <button type="submit" className={styles.button}>
-          Submit
-        </button>
-      </form>
+          {/* submit */}
+          <button
+            type="submit"
+            className="w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-600 transition duration-200"
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

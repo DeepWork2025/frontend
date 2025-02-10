@@ -26,14 +26,11 @@ const App: React.FC = () => {
     alert("Registration successful!");
   };
 
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    return localStorage.getItem("isLoggedIn") === "true";
-  });
   const handleLogin = (_email: string, _password: string): boolean => {
     const loginSuccessful = true;
     if (loginSuccessful) {
       localStorage.setItem("isLoggedIn", "true");
-      setIsLoggedIn(true);
+
       return true;
     }
     return false;
@@ -43,10 +40,7 @@ const App: React.FC = () => {
     <AvatarProvider>
       <Router>
         <Routes>
-          <Route
-            path="/"
-            element={isLoggedIn ? <Navigate to="/home" replace /> : <Banner />}
-          />
+          <Route path="/" element={<Banner />} />
           <Route
             path="/register"
             element={<Register onRegister={handleRegister} />}
