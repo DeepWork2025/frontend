@@ -5,12 +5,20 @@ import {useState} from 'react';
 function AddEvent() {
   const [showEventForm, setShowEventForm] = useState(false);
 
-  const handleEventSubmit = (eventData: EventData) => {
-    //Handle successful event creation
-    console.log('Event created:'
-    , eventData);
-    setShowEventForm(false); // Close form after submission
+  const handleEventSubmit = async (eventData: EventData) => {
+    try{
+      //Handle successful event creation
+      // To-do:
+      // 1. Add to a global event state
+      // 2. Save to backend
+      // 3. Show success notification
+      console.log('Event created:'
+        , eventData);
+      setShowEventForm(false); // Close form after submission
+  } catch(error){
+    console.error('Failed to create event:', error);
   }
+}
   return (
     <div>
       <button
@@ -23,7 +31,6 @@ function AddEvent() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="relative bg-base-100 rounded-lg max-h-[90vh] overflow-y-auto">
           <EventForm
-            initialDateTime={new Date()}
             onSubmit={handleEventSubmit}
             onClose={() => setShowEventForm(false)}
           />

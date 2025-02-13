@@ -4,15 +4,14 @@ import { validateEventData } from '../../utils/eventValidation';
 import { createEvent } from '../../api/eventApi';
 
 const CreateEventForm: React.FC<EventFormProps> = ({
-    initialDateTime,
     onSubmit,
     onClose
 }) => {
   // Form state
     const [formData, setFormData] = useState<EventData>({
         title: '',
-        start: initialDateTime || new Date(),
-        end: new Date((initialDateTime || Date.now()) + 3600000),
+        startTime: '09:00',
+        endTime: '10:00',
         description: '',
         label: ''
     });
@@ -85,9 +84,9 @@ return (
                 <span className="label-text">Start Time *</span>
               </label>
               <input
-                type="datetime-local"
-                name="start"
-                value={formData.start.toISOString().slice(0, 16)}
+                type="time"
+                name="startTime"
+                value={formData.startTime}
                 onChange={handleChange}
                 className="input input-bordered"
               />
@@ -100,7 +99,7 @@ return (
               <input
                 type="datetime-local"
                 name="end"
-                value={formData.end.toISOString().slice(0, 16)}
+                value={formData.endTime}
                 onChange={handleChange}
                 className={`input input-bordered ${errors.end ? 'input-error' : ''}`}
               />

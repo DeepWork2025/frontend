@@ -22,34 +22,59 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
         const hourHeight = 48; // Assuming each hour block is 48px high
         const hour = Math.floor(relativeY / hourHeight);
 
-        return `${hour.toString().padStart(2,'0')}:00`;
+        // Ensure hour is within 0-23 range
+        const clampedHour = Math.max(0, Math.min(23, hour));
+        return `${clampedHour.toString().padStart(2,'0')}:00`;
     };
 
-    // when user click TimeAxis to drag
+    // when user click TimeAxis
     const handleMouseDown = (e:React.MouseEvent) => {
         if(!containerRef.current) return;
 
+        const time = getTimeFromPosition(e.clientY);
         setDragState({
             isDragging: true,
             startY: e.clientY,
-            startTime: getTimeFromPosition(e.clientY),
-            endTime: getTimeFromPosition(e.clientY),
+            startTime: time,
+            endTime: time,
         });
     };
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if(!dragState.isDragging) return;
 
+        const newEndTime = getTimeFromPosition(e.clientY);
         setDragState(prev => ({
             ...prev,
-            endTime: getTimeFromPosition(e.clientY),
+            endTime: newEndTime,
         }));
     };
 
     const handleMouseUp = () => {
         if(!dragState.isDragging) return;
 
-        onCreateEvent(dragState.startTime, dragState.endTime);
+        // Ensure start time is before end time
+        const [startHour, endHour] = [
+            parseInt(dragState.startTime.split(':')[0]),
+            parseInt(dragState.endTime.split(':')[0])
+        ];
+
+        const [finalStartTime, finalEndTime] = startHour <= endHour 
+            ? [dragState.startTime, dragState.endTime]
+            : [dragState.endTime, dragState.startTime];
+
+            onCreateEvent(finalStartTime, finalEndTime);
+
+            setDragState({
+                isDragging: false,
+                startY: 0,
+                startTime: '',
+                endTime: '',
+            });
+    };
+
+    const handleMouseLeave = () => {
+        if (!dragState.isDragging) return;
 
         setDragState({
             isDragging: false,
@@ -65,7 +90,8 @@ const EventCreator: React.FC<EventCreatorProps> = ({ onCreateEvent }) => {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseLeave="absolute inset-0 z-10">
+        onMouseLeave={handleMouseLeave}
+        className='absolute inset-0 h-full w-full'>
             {/* drag preview */}
             {dragState.isDragging && (
                 <div
